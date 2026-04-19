@@ -11,3 +11,75 @@
 // Integration here has a very specific meaning: they test **the public API** of your project.
 // You'll need to pay attention to the visibility of your types and methods; integration
 // tests can't access private or `pub(crate)` items.
+
+pub struct Order {
+    product_name: String,
+    quantity: u32,
+    unit_price: u32
+}
+
+impl Order {
+    fn product_name_validation(product_name: &String) {
+        if product_name.is_empty() {
+            panic!();
+        }
+        if product_name.len() > 300 {
+            panic!();
+        }
+    }
+
+    fn quantity_validation(quantity: &u32) {
+        if *quantity <= 0 {
+            panic!();
+        }
+    }
+
+    fn unit_price_validation(unit_price: &u32) {
+        if *unit_price <= 0 {
+            panic!();
+        }
+    }
+
+    pub fn new(product_name: String, quantity: u32, unit_price: u32) -> Order {
+        Self::product_name_validation(&product_name);
+        Self::quantity_validation(&quantity);
+        Self::unit_price_validation(&unit_price);
+
+        Order {
+            product_name,
+            quantity,
+            unit_price
+        }
+    }
+
+    pub fn product_name(&self) -> &String {
+        &self.product_name
+    }
+
+    pub fn quantity(&self) -> &u32 {
+        &self.quantity
+    }
+
+    pub fn unit_price(&self) -> &u32 {
+        &self.unit_price
+    }
+
+    pub fn set_product_name(&mut self, new_product_name: String) {
+        Self::product_name_validation(&new_product_name);
+        self.product_name = new_product_name;
+    }
+
+    pub fn set_quantity(&mut self, new_quantity: u32) {
+        Self::quantity_validation(&new_quantity);
+        self.quantity = new_quantity;
+    }
+
+    pub fn set_unit_price(&mut self, new_unit_price: u32) {
+        Self::unit_price_validation(&new_unit_price);
+        self.unit_price = new_unit_price;
+    }
+
+    pub fn total(&self) -> u32 {
+        (*(&self.quantity)) * (*(&self.unit_price))
+    }
+}
